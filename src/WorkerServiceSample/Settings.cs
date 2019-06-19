@@ -2,6 +2,8 @@
 {
     public class Settings
     {
-        public string Foo { get; set; }
+        public string BlobContainerUrl { get; set; }
+
+        public int DelaySeconds { get; set; } = 360;
     }
 }
