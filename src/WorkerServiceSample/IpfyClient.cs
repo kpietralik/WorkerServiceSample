@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace WorkerServiceSample
 {
-    public class IpfyClient
+    public class IpfyClient : IIpfyClient
     {
         public HttpClient Client { get; }
 
