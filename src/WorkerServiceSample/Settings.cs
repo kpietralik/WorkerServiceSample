@@ -4,6 +4,6 @@
     {
         public string BlobContainerUrl { get; set; }
 
-        public int DelaySeconds { get; set; } = 360;
+        public int DelaySeconds { get; set; } = 300;
     }
 }

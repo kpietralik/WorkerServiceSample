@@ -14,7 +14,7 @@ namespace WorkerServiceSample
         private readonly IOptions<Settings> _settings;
         private readonly IpfyClient _ipfyClient;
         private readonly BlobContainerClient _blobContainerClient;
-        
+
         public IpfyService(
             IOptions<Settings> settings,
             IpfyClient ipfyClient,
@@ -29,21 +29,30 @@ namespace WorkerServiceSample
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation($"Worker started at: {DateTimeOffset.Now}");
+            _logger.LogInformation($"Worker started at: {DateTimeOffset.Now}, " +
+                $"with interval of: {_settings.Value.DelaySeconds} seconds, " +
+                $"calling url: {_settings.Value.BlobContainerUrl}");
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                var time = DateTimeOffset.Now;
+                try
+                {
+                    var time = DateTimeOffset.Now;
 
-                _logger.LogInformation($"Worker {_settings.Value.BlobContainerUrl} running at: {time}");
+                    _logger.LogDebug($"Worker executing at: {time}");
 
-                var ip = await _ipfyClient.GetIpAddress();
+                    var ip = await _ipfyClient.GetIpAddress();
 
-                _logger.LogInformation($"Worker IP = {ip} at: {time}");
+                    _logger.LogDebug($"Ip = {ip}");
 
-                await _blobContainerClient.PutIpAddress(_settings.Value.BlobContainerUrl, ip);
+                    await _blobContainerClient.PutIpAddress(_settings.Value.BlobContainerUrl, ip);
 
-                await Task.Delay(TimeSpan.FromMilliseconds(_settings.Value.DelaySeconds), stoppingToken);
+                    await Task.Delay(TimeSpan.FromSeconds(_settings.Value.DelaySeconds), stoppingToken);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.ToString());
+                }
             }
         }
     }

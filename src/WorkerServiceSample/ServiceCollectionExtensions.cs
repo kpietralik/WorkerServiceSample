@@ -9,7 +9,7 @@ namespace WorkerServiceSample
         {
             services
                 .AddHttpClient<IpfyClient>()
-                .SetHandlerLifetime(TimeSpan.FromHours(24));
+                .SetHandlerLifetime(TimeSpan.FromHours(1));
 
             return services;
         }

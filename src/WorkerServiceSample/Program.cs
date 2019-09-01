@@ -3,12 +3,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.EventLog;
 
 namespace WorkerServiceSample
 {
     public class Program
     {
-        public static void Main(string[] args) => 
+        public static void Main(string[] args) =>
             CreateHostBuilder(args).Build().Run();
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -22,12 +23,12 @@ namespace WorkerServiceSample
                     $"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json",
                     optional: true);
                 configApp.AddEnvironmentVariables();
+                configApp.AddUserSecrets<Settings>();
                 configApp.AddCommandLine(args);
             })
             .ConfigureServices((context, services) =>
             {
                 services
-                    .AddLogging()
                     .AddOptions()
                     .Configure<Settings>(x => context.Configuration.GetSection(nameof(IpfyService)).Bind(x))
                     .AddIpfyClient()
@@ -39,7 +40,8 @@ namespace WorkerServiceSample
                 loggingBuilder
                     .AddConsole()
                     .AddDebug()
-                    .AddEventLog();
-            });
+                    .AddEventLog()
+                    .AddFilter<EventLogLoggerProvider>($"{nameof(WorkerServiceSample)}.{nameof(IpfyService)}", LogLevel.Information);
+    });
     }
 }
