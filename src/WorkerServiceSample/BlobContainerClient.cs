@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace WorkerServiceSample
 {
-    public class BlobContainerClient
+    public class BlobContainerClient : IBlobContainerClient
     {
-        public HttpClient Client { get; }
+        private readonly HttpClient _client;
 
         private readonly ILogger<BlobContainerClient> _logger;
 
@@ -19,13 +19,13 @@ namespace WorkerServiceSample
             client.DefaultRequestHeaders.Add("User-Agent", "IpfyClient");
             client.DefaultRequestHeaders.Add("x-ms-blob-type", "BlockBlob");
 
-            Client = client;
+            _client = client;
             _logger = logger ?? new NullLogger<BlobContainerClient>();
         }
 
         public async Task<string> PutIpAddress(string url, string ip)
         {
-            var response = await Client.PutAsync(url, new StringContent($"{ip} {DateTime.Now}"));
+            var response = await _client.PutAsync(url, new StringContent($"{ip} {DateTime.Now}"));
             _logger.LogDebug($"{nameof(BlobContainerClient)} status code: {response.StatusCode}");
 
             response.EnsureSuccessStatusCode();

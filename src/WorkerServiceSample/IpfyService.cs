@@ -13,17 +13,17 @@ namespace WorkerServiceSample
         private readonly ILogger<IpfyService> _logger;
         private readonly IOptions<Settings> _settings;
         private readonly IIpfyClient _ipfyClient;
-        private readonly BlobContainerClient _blobContainerClient;
+        private readonly IBlobContainerClient _blobContainerClient;
 
         public IpfyService(
             IOptions<Settings> settings,
             IIpfyClient ipfyClient,
-            BlobContainerClient blobContainerClient,
+            IBlobContainerClient blobContainerClient,
             ILogger<IpfyService> logger)
         {
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
             _ipfyClient = ipfyClient ?? throw new ArgumentNullException(nameof(ipfyClient));
-            // TEMP _blobContainerClient = blobContainerClient ?? throw new ArgumentNullException(nameof(blobContainerClient));
+            _blobContainerClient = blobContainerClient ?? throw new ArgumentNullException(nameof(blobContainerClient));
             _logger = logger ?? new NullLogger<IpfyService>();
         }
 

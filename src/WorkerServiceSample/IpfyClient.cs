@@ -8,7 +8,7 @@ namespace WorkerServiceSample
 {
     public class IpfyClient : IIpfyClient
     {
-        public HttpClient Client { get; }
+        private readonly HttpClient _client;
 
         private readonly ILogger<IpfyClient> _logger;
 
@@ -20,13 +20,13 @@ namespace WorkerServiceSample
             client.BaseAddress = new Uri("https://api.ipify.org");
             client.DefaultRequestHeaders.Add("User-Agent", "IpfyClient");
 
-            Client = client;
+            _client = client;
             _logger = logger ?? new NullLogger<IpfyClient>();
         }
 
         public async Task<string> GetIpAddress()
         {
-            var response = await Client.GetAsync(string.Empty);
+            var response = await _client.GetAsync(string.Empty);
             _logger.LogDebug($"{nameof(IpfyClient)} status code: {response.StatusCode}");
 
             response.EnsureSuccessStatusCode();

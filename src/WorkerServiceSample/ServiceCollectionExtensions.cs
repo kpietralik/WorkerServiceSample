@@ -8,7 +8,7 @@ namespace WorkerServiceSample
         public static IServiceCollection AddIpfyClient(this IServiceCollection services)
         {
             services
-                .AddHttpClient<IpfyClient>()
+                .AddHttpClient<IIpfyClient, IpfyClient>()
                 .SetHandlerLifetime(TimeSpan.FromHours(1));
 
             return services;
@@ -17,7 +17,7 @@ namespace WorkerServiceSample
         public static IServiceCollection AddBlobContainerClient(this IServiceCollection services)
         {
             services
-                .AddHttpClient<BlobContainerClient>()
+                .AddHttpClient<IBlobContainerClient, BlobContainerClient>()
                 .SetHandlerLifetime(TimeSpan.FromHours(1));
 
             return services;
