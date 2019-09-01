@@ -12,18 +12,18 @@ namespace WorkerServiceSample
     {
         private readonly ILogger<IpfyService> _logger;
         private readonly IOptions<Settings> _settings;
-        private readonly IpfyClient _ipfyClient;
+        private readonly IIpfyClient _ipfyClient;
         private readonly BlobContainerClient _blobContainerClient;
 
         public IpfyService(
             IOptions<Settings> settings,
-            IpfyClient ipfyClient,
+            IIpfyClient ipfyClient,
             BlobContainerClient blobContainerClient,
             ILogger<IpfyService> logger)
         {
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
             _ipfyClient = ipfyClient ?? throw new ArgumentNullException(nameof(ipfyClient));
-            _blobContainerClient = blobContainerClient ?? throw new ArgumentNullException(nameof(blobContainerClient));
+            // TEMP _blobContainerClient = blobContainerClient ?? throw new ArgumentNullException(nameof(blobContainerClient));
             _logger = logger ?? new NullLogger<IpfyService>();
         }
 
